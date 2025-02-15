@@ -2,6 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { API_URL } from '../../constants/api';
+import { getErrorMessage } from '../../utils/errors';
 
 export default async function createUser( _prevState: any, formData: FormData) {
   const response = await fetch(`${API_URL}/users`, {
@@ -13,7 +14,7 @@ export default async function createUser( _prevState: any, formData: FormData) {
 
   if (!response.ok) {
     console.log(parsedResponse);
-    return {error: ""}
+    return {error: getErrorMessage(parsedResponse)};
   }
 
   redirect('/');
