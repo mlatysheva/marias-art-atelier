@@ -3,15 +3,15 @@ import { API_URL } from '../constants/api';
 import { getErrorMessage } from './errors';
 
 // Return the headers object with the authentication cookie
-export const getHeaders = () => ({
-    Cookie: (cookies()).toString(),
+export const getHeaders = async() => ({
+    Cookie: (await cookies()).toString(),
   });
 
 export const post = async (path: string, formData: FormData) => {
   const response = await fetch(`${API_URL}/${path}`, {
       method: 'POST',
       headers: {
-        "Content-Type": "application/json", ...getHeaders(),
+        "Content-Type": "application/json", ...(await getHeaders()),
       },
       body: JSON.stringify(Object.fromEntries(formData)),
     });
@@ -27,7 +27,7 @@ export const post = async (path: string, formData: FormData) => {
 
 export const get = async(path: string) => {
   const response = await fetch(`${API_URL}/${path}`, {
-    headers: { ...getHeaders()},
+    headers: { ...(await getHeaders())},
   });
   return response.json();
 }
