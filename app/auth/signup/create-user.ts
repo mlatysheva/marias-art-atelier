@@ -1,8 +1,8 @@
 "use server";
 
 import { redirect } from 'next/navigation';
-import { post } from '../../utils/fetch';
-import { FormError } from '../../shared/form-error.interface';
+import { post } from '../../shared/utils/fetch';
+import { FormError } from '../../shared/interfaces/form-error.interface';
 
 export default async function createUser(_prevState: FormError, formData: FormData) {
   const { error } = await post("users", formData);

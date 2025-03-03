@@ -1,9 +1,9 @@
 "use server";
 
 import { redirect } from 'next/navigation';
-import { API_URL } from '../../constants/api';
-import { FormError } from '../../shared/form-error.interface';
-import { getErrorMessage } from '../../utils/errors';
+import { API_URL } from '../../shared/constants/api';
+import { FormError } from '../../shared/interfaces/form-error.interface';
+import { getErrorMessage } from '../../shared/utils/errors';
 import { cookies } from 'next/headers';
 import { jwtDecode } from 'jwt-decode';
 
