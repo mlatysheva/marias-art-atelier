@@ -17,9 +17,11 @@ import { AuthContext } from '../auth/auth-context';
 import { MouseEvent, useContext, useState } from 'react';
 import { publicRoutes, routes } from '../shared/constants/routes';
 
-const userSettings = ["Settings", "Logout"];
+interface HeaderProps {
+  logout: () => Promise<void>;
+}
 
-export default function Header() {
+export default function Header({ logout }: HeaderProps) {
   const isAuthenticated = useContext(AuthContext);
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -46,6 +48,7 @@ export default function Header() {
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
+              ml: 2,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
@@ -99,6 +102,7 @@ export default function Header() {
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
+              ml: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
               fontFamily: 'monospace',
@@ -121,15 +125,15 @@ export default function Header() {
               </Button>
             ))}
           </Box>
-          {isAuthenticated && <UserSettings />}
+          {isAuthenticated && <UserSettings logout={logout}/>}
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
 
-const UserSettings = () => {
 
+const UserSettings = ({logout}: HeaderProps) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -163,11 +167,12 @@ const UserSettings = () => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        {userSettings.map((setting: string) => (
-          <MenuItem key={setting} onClick={handleCloseUserMenu}>
-            <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
-          </MenuItem>
-        ))}
+        <MenuItem key="Logout" onClick={async() => {
+          await logout();
+          handleCloseUserMenu();
+        }}>
+          <Typography sx={{ textAlign: 'center' }}>Logout</Typography>
+        </MenuItem>
       </Menu>
     </Box>
   )

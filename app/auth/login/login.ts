@@ -6,6 +6,7 @@ import { FormError } from '../../shared/interfaces/form-error.interface';
 import { getErrorMessage } from '../../shared/utils/errors';
 import { cookies } from 'next/headers';
 import { jwtDecode } from 'jwt-decode';
+import { AUTHENTICATION_COOKIE } from '../auth-cookie';
 
 export default async function login(_prevState: FormError, formData: FormData) {
   const response = await fetch(`${API_URL}/auth/login`, {
@@ -33,7 +34,7 @@ export const setAuthCookie = async (response: Response) => {
     // Parse the token from the Set-Cookie header
     const token = setCookieHeader.split(';')[0].split('=')[1];
     (await cookies()).set({
-      name: 'Authentication',
+      name: AUTHENTICATION_COOKIE,
       value: token,
       secure: true,
       httpOnly: true,
