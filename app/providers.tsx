@@ -12,13 +12,14 @@ interface ProvidersProps {
 }
 
 export default function Providers({ children, authenticated }: ProvidersProps) {
-    return (
-      <AppRouterCacheProvider>
-        <ThemeProvider theme={darkTheme}>
-          <AuthContext.Provider value={authenticated}>
-            {children}
-          </AuthContext.Provider>
-        </ThemeProvider>
-      </AppRouterCacheProvider>
-    );
+
+  return (
+    <AppRouterCacheProvider>
+      <ThemeProvider theme={ darkTheme }>
+        <AuthContext.Provider value={ authenticated }>
+          { children }
+        </AuthContext.Provider>
+      </ThemeProvider>
+    </AppRouterCacheProvider>
+  );
 }

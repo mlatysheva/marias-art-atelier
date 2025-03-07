@@ -39,6 +39,6 @@ export const setAuthCookie = async (response: Response) => {
       secure: true,
       httpOnly: true,
       expires: new Date(jwtDecode(token).exp! * 1000),
-    })
+    });
   }
 }
