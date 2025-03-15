@@ -1,10 +1,7 @@
-import getMe from './get-me';
+import CreatePaintingFab from './paintings/create-painting-fab';
 
 export default async function Home() {
-  const me = await getMe();
-  console.log(me);
-  
   return (
-    <></>
+    <CreatePaintingFab />
   );
 }
