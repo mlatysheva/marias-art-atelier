@@ -2,13 +2,13 @@
 
 import { redirect } from 'next/navigation';
 import { API_URL } from '../../shared/constants/api';
-import { FormError } from '../../shared/interfaces/form-error.interface';
+import { FormResponse } from '../../shared/interfaces/form-response.interface';
 import { getErrorMessage } from '../../shared/utils/errors';
 import { cookies } from 'next/headers';
 import { jwtDecode } from 'jwt-decode';
 import { AUTHENTICATION_COOKIE } from '../auth-cookie';
 
-export default async function login(_prevState: FormError, formData: FormData) {
+export default async function login(_prevState: FormResponse, formData: FormData) {
   const response = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
     headers: {
@@ -36,9 +36,9 @@ export const setAuthCookie = async (response: Response) => {
     (await cookies()).set({
       name: AUTHENTICATION_COOKIE,
       value: token,
-      secure: true,
+      secure: false,
       httpOnly: true,
       expires: new Date(jwtDecode(token).exp! * 1000),
-    })
+    });
   }
 }

@@ -16,13 +16,16 @@ import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import { AuthContext } from '../auth/auth-context';
 import { MouseEvent, useContext, useState } from 'react';
 import { publicRoutes, routes } from '../shared/constants/routes';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
   logout: () => Promise<void>;
 }
 
 export default function Header({ logout }: HeaderProps) {
-  const isAuthenticated = useContext(AuthContext);
+  const isAuthenticated  = useContext(AuthContext);
+  const router = useRouter();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
@@ -44,8 +47,8 @@ export default function Header({ logout }: HeaderProps) {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            href="/"
             sx={{
               mr: 2,
               ml: 2,
@@ -88,7 +91,10 @@ export default function Header({ logout }: HeaderProps) {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+                <MenuItem key={page.title} onClick={() => {
+                  router.push(page.path);
+                  handleCloseNavMenu();
+                }}>
                   <Typography sx={{ textAlign: 'center' }}>{page.title}</Typography>
                 </MenuItem>
               ))}
@@ -96,10 +102,10 @@ export default function Header({ logout }: HeaderProps) {
           </Box>
           <ShoppingBasketIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
-            variant="h5"
+            variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            href="/"
             sx={{
               mr: 2,
               ml: 2,
@@ -118,7 +124,10 @@ export default function Header({ logout }: HeaderProps) {
             {pages.map((page) => (
               <Button
                 key={page.title}
-                onClick={handleCloseNavMenu}
+                onClick={() => {
+                  router.push(page.path);
+                  handleCloseNavMenu();
+                }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page.title}

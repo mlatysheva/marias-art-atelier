@@ -2,9 +2,9 @@
 
 import { redirect } from 'next/navigation';
 import { post } from '../../shared/utils/fetch';
-import { FormError } from '../../shared/interfaces/form-error.interface';
+import { FormResponse } from '../../shared/interfaces/form-response.interface';
 
-export default async function createUser(_prevState: FormError, formData: FormData) {
+export default async function createUser(_prevState: FormResponse, formData: FormData) {
   const { error } = await post("users", formData);
 
   if (error) {
