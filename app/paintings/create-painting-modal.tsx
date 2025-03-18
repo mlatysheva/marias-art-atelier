@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, FormControl, InputAdornment, InputLabel, MenuItem, Modal, OutlinedInput, Select, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, FormControl, InputAdornment, InputLabel, MenuItem, Modal, OutlinedInput, Select, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { FormResponse } from '../shared/interfaces/form-response.interface';
 import createPainting from './create-painting';
@@ -57,7 +57,7 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
           <Typography variant="h5" sx={{ mb: 2, textAlign: 'center' }}>Add a new painting</Typography>
           <form 
             className="w-full" 
-            action={(formData) => {postPainting(formData)}}
+            action={postPainting}
             >
             <Stack spacing={2}>
               <TextField name="title" label='Title' variant='outlined' required />
@@ -67,7 +67,7 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
                 minRows={2}
                 maxRows={5}
                 label='Description' 
-                variant='outlined' 
+                variant='outlined'
               />
               <TextField name="artist" label='Artist' defaultValue="Maria Latysheva" variant='outlined' />
               
@@ -159,8 +159,16 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
                     <MenuItem value="Other">Other</MenuItem>
                   </Select>
                 </FormControl>
-                {response?.error && <div>{!!response?.error}</div>}
               </Stack> 
+        
+              {response?.error && (
+                <Alert severity="error">
+                  {response.error.split(',').map((msg, index) => (
+                    <div key={index}>{msg}</div>
+                  ))}
+                </Alert>
+              )}
+
               <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
                 <Button variant='outlined' style={{width: '50%'}} type="button" onClick={() => {handleClose()}}>Cancel</Button>           
                 <Button variant='contained' style={{width: '50%'}} type="submit">Create</Button>
