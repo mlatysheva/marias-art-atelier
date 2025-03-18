@@ -7,6 +7,7 @@ import { getErrorMessage } from '../../shared/utils/errors';
 import { cookies } from 'next/headers';
 import { jwtDecode } from 'jwt-decode';
 import { AUTHENTICATION_COOKIE } from '../auth-cookie';
+import { revalidatePath } from 'next/cache';
 
 export default async function login(_prevState: FormResponse, formData: FormData) {
   const response = await fetch(`${API_URL}/auth/login`, {
@@ -25,6 +26,8 @@ export default async function login(_prevState: FormResponse, formData: FormData
 
   // Set the authentication cookie received from the server
   setAuthCookie(response);
+  
+  revalidatePath('/');
   redirect('/');
 }
 
