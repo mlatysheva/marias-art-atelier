@@ -21,11 +21,13 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
 
   const styles = {
     position: "absolute",
+    overflow: "auto",
     top: "50%",
     left: "50%",
     width: "100%",
     maxWidth: 600,
     minWidth: 400,
+    maxHeight: "90vh",
     transform: "translate(-50%, -50%)",
     bgcolor: "background.paper",
     border: "2px solid #000",
@@ -67,6 +69,15 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
                 minRows={2}
                 maxRows={5}
                 label='Description' 
+                variant='outlined'
+              />
+              <TextField 
+                name="tags"
+                placeholder='Add tags separated by comma to generate automatic description'
+                multiline
+                minRows={1}
+                maxRows={2}
+                label='Tags' 
                 variant='outlined'
               />
               <TextField name="artist" label='Artist' defaultValue="Maria Latysheva" variant='outlined' />
