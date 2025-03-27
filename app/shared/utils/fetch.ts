@@ -25,9 +25,9 @@ export const post = async (path: string, formData: FormData) => {
     return { error: ""};
 }
 
-export const get = async(path: string) => {
+export const get = async<T>(path: string) => {
   const response = await fetch(`${API_URL}/${path}`, {
     headers: { ...(await getHeaders())},
   });
-  return response.json();
+  return response.json() as T;
 }

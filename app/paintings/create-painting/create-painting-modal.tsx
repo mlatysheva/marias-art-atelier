@@ -2,7 +2,7 @@
 
 import { Alert, Box, Button, FormControl, InputAdornment, InputLabel, MenuItem, Modal, OutlinedInput, Select, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import { FormResponse } from '../shared/interfaces/form-response.interface';
+import { FormResponse } from '../../shared/interfaces/form-response.interface';
 import createPainting from './create-painting';
 import { YearCalendar } from '@mui/x-date-pickers/YearCalendar';
 import dayjs from 'dayjs';
@@ -22,6 +22,7 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
   const styles = {
     position: "absolute",
     overflow: "auto",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
     top: "50%",
     left: "50%",
     width: "100%",
