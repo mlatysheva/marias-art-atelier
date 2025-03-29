@@ -19,10 +19,10 @@ export const post = async (path: string, formData: FormData) => {
     const parsedResponse = await response.json();
   
     if (!response.ok) {
-      return {error: getErrorMessage(parsedResponse)};
+      return {error: getErrorMessage(parsedResponse), data: parsedResponse};
     }
 
-    return { error: ""};
+    return { error: "", data: parsedResponse};
 }
 
 export const get = async<T>(path: string, tags?: string[]) => {

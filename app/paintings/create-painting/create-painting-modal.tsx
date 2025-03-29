@@ -1,13 +1,14 @@
 "use client";
 
 import { Alert, Box, Button, FormControl, InputAdornment, InputLabel, MenuItem, Modal, OutlinedInput, Select, Stack, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import { ChangeEvent, CSSProperties, useState } from 'react';
 import { FormResponse } from '../../shared/interfaces/form-response.interface';
 import createPainting from './create-painting';
 import { YearCalendar } from '@mui/x-date-pickers/YearCalendar';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 
 interface CreatePaintingModalProps {
@@ -18,6 +19,7 @@ interface CreatePaintingModalProps {
 export default function CreatePaintingModal({ open, handleClose }: CreatePaintingModalProps) {
   const [response, setResponse] = useState<FormResponse>();
   const [year, setYear] = useState(dayjs().year());
+  const [fileNames, setFileNames] = useState<string[]>([]);
 
   const styles = {
     position: "absolute",
@@ -36,12 +38,25 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
     p: 4, 
   }
 
+  const fileInputStyles: CSSProperties = {
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  };
+
   const currentYear = dayjs();
   const minYear = dayjs().year(2000);
 
   const onClose = () => {
     setResponse(undefined);
     handleClose();
+    setFileNames([]);
   }
 
   const postPainting = async(formData: FormData) => {
@@ -50,6 +65,13 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
   
     if (!response.error) {
       onClose();
+    }
+  }
+
+  const renderFileNames = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const fileNames = [...event.target.files].map((file) => file.name);
+      setFileNames(fileNames); 
     }
   }
   
@@ -172,7 +194,21 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
                   </Select>
                 </FormControl>
               </Stack> 
-        
+              <Button component='label' variant='outlined' startIcon={<CloudUploadIcon />}>
+                Upload images
+                <input 
+                  type="file" 
+                  name="image" 
+                  style={fileInputStyles} 
+                  onChange={renderFileNames} 
+                  multiple
+                  accept="image/*" 
+                />
+              </Button>
+              {fileNames.map((file) => (
+                <Typography key={file}>{file}</Typography>
+              ))}
+      
               {response?.error && (
                 <Alert severity="error">
                   {response.error.split(',').map((msg, index) => (
