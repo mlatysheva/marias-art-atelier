@@ -6,23 +6,23 @@ import { API_URL } from '../../shared/constants/api';
 
 export default async function createPainting(formData: FormData) {
   const response = await post("paintings", formData);
-  const paintingImage = formData.get('image');
-  if (paintingImage && !response.error) {
-    uploadPaintingImage(response.data.id, [paintingImage as File]);
+  const paintingImages = formData.getAll('image') as File[];
+  
+  if (paintingImages.length > 0 && !response.error) {
+    uploadPaintingImages(response.data.id, paintingImages);
   }
+
   revalidateTag('paintings');
   return response;
 }
 
-export async function uploadPaintingImage(paintingId: string, files: File[]) {
+export async function uploadPaintingImages(paintingId: string, files: File[]) {
   const formData = new FormData();
-  files.forEach(async (file) => { 
-    formData.append("image", file);
-    await fetch (`${API_URL}/paintings/${paintingId}/image`, {
-      body: formData,
-      method: 'POST',
-      headers: await getHeaders(),
-    });
-  });
+  files.forEach((file) => formData.append("image", file));
   
+  await fetch (`${API_URL}/paintings/${paintingId}/images`, {
+    body: formData,
+    method: 'POST',
+    headers: await getHeaders(),
+  });  
 }
