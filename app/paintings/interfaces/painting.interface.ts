@@ -9,4 +9,6 @@ export interface Painting {
   materials: string[],
   price: number,
   userId: string,
+  imageExists: boolean,
+  images: string[],
 }
