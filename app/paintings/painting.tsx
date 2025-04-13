@@ -14,7 +14,7 @@ export default function Painting({ painting} : PaintingProps) {
       {
         painting.imageExists && 
         <Image 
-          src={`${API_URL}/paintings/${painting.id}/${painting.images[0]}`} 
+          src={`${API_URL}/images/paintings/${painting.id}/${painting.images[0]}`} 
           alt={painting.title} 
           width='0'
           height='0'
