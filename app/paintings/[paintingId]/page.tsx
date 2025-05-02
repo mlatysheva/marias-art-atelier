@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid2/Grid2";
 import getPainting from './get-painting';
 import Image from 'next/image';
 import { getFirstPaintingImagePath } from '../painting-image';
+import Checkout from '../../checkout/checkout';
 
 interface SinglePaintingProps {
   params: {
@@ -37,21 +38,22 @@ export default async function SinglePainting({ params }: SinglePaintingProps) {
           }
           <Typography variant='h5'>€{ painting.price }</Typography>
         </Stack>
+        {
+          painting.imageExists && (
+            <Grid sx={{ xs: 12, md: 6 }} className='pb-6'>
+              <Image 
+                src={getFirstPaintingImagePath(painting.id, painting.images)}
+                alt={painting.title}
+                width={0}
+                height={0}
+                className='w-auto sm:w-3/4 mt-3 mb-3'  
+                sizes='100vw'          
+              />
+            </Grid>
+          )
+        }
+        <Checkout paintingId={painting.id} />
       </Grid>
-      {
-        painting.imageExists && (
-          <Grid sx={{ xs: 12, md: 6 }} className='p-4'>
-            <Image 
-              src={getFirstPaintingImagePath(painting.id, painting.images)}
-              alt={painting.title}
-              width={0}
-              height={0}
-              className='w-auto sm:w-3/4 mt-3 mb-3'  
-              sizes='100vw'          
-            />
-          </Grid>
-        )
-      }
     </Grid>
   );
   }
