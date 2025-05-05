@@ -11,8 +11,9 @@ interface SinglePaintingProps {
   };
 }
 
-export default async function SinglePainting({ params }: SinglePaintingProps) {
-  const painting = await getPainting(params.paintingId);
+export default async function SinglePainting({params}: SinglePaintingProps) {
+  const { paintingId } = await params;
+  const painting = await getPainting(paintingId);
 
   if (!painting) {
     return <p>Painting not found</p>;
