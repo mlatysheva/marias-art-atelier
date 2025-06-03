@@ -6,14 +6,12 @@ import { getFirstPaintingImagePath } from '../painting-image';
 import Checkout from '../../checkout/checkout';
 
 interface SinglePaintingProps {
-  params: {
-    paintingId: string;
-  };
+  params: Promise<{ paintingId: string }>;
 }
 
-export default async function SinglePainting({params}: SinglePaintingProps) {
-  const { paintingId } = await params;
-  const painting = await getPainting(paintingId);
+export default async function SinglePainting(props: SinglePaintingProps) {
+  const params = await props.params;
+  const painting = await getPainting(params.paintingId);
 
   if (!painting) {
     return <p>Painting not found</p>;
