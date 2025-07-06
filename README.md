@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Maria's Art Atelier frontend app
 
-## Getting Started
+## Description
 
-First, run the development server:
+This is a Next.js React app bootstrapped with `create-next-app`.
+
+The app provides the following functionality supported by the backend app (https://github.com/mlatysheva/marias-art-atelier-backend):
+- Signing up a user using validation provided by the `zod` library
+- Authenticating and logging the user based on cookies
+- Providing the list of paintings available for sale
+- Adding a new painting using validation provided by the `zod` library
+- Buying a selected painting using the `Stripe` interface
+- Using websockets with `socket.io` to update the list of paintings in real time after a successful purchase
+
+## Project setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+$ npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Compile and run the project
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# development
+$ npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Using the app 
 
-## Learn More
+After installing the dependencies with `npm install` and starting the app with `npm run dev`, the app will be running on `http://localhost:3000/` showing the signup/login screen.
 
-To learn more about Next.js, take a look at the following resources:
+Choose the signup screen and fill in the form:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The form uses built-in html validation:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+![Signup form](screenshots/signup_screen.png)
 
-## Deploy on Vercel
+The form also uses `zod` validation to provide more robust validation:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+![Zod validation in action](screenshots/signup_validation_screen.png)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The screen showing all paintings available for purchase:
+
+![Paintings available for sale](screenshots/paintings_screen.png)
+
+The user can add a painting for sale using the form with `zod` validation:
+
+![Add new painting](screenshots/add_new_painting_screen.png)
+
+The user can select a single painting:
+
+![Single painting screen](screenshots/single_painting_screen.png)
+
+Having clicked on the `Buy` button, the user is taken to the `Stipe` payment system to complete the purchase:
+
+![Stripe payment screen](screenshots/stripe_payment_screen.png)
+
+After a successful purchase, the list of available paintings is updated in real time using websocket connection:
+
+![Available paintings after purchase](screenshots/paintings_after_payment.png)
