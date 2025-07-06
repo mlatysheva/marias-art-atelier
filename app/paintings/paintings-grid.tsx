@@ -1,7 +1,7 @@
 "use client";
 
 import { Painting as IPainting } from './interfaces/painting.interface';
-import Grid from "@mui/material/Grid2/Grid2";
+import Grid from "@mui/material/Grid2";
 import Painting from './painting';
 import { useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
@@ -35,11 +35,11 @@ export default function PaintingsGrid({ paintings }: PaintingsGridProps) {
 
   return(
     <Grid container spacing={3}>
-    {paintings.map((painting) => (
-      <Grid key={painting.id} size={{ xs: 12, md: 6, lg: 4 }} >
-        <Painting painting={painting}/>
-      </Grid>
-    ))}
-  </Grid>
+      {paintings.map((painting) => (
+        <Grid key={painting.id} size={{ xs: 12, md: 6, lg: 4 }} >
+          <Painting painting={painting}/>
+        </Grid>
+      ))}
+    </Grid>
   )
 }

@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import Grid from "@mui/material/Grid2/Grid2";
+import Grid from "@mui/material/Grid2";
 import getPainting from './get-painting';
 import Image from 'next/image';
 import { getFirstPaintingImagePath } from '../painting-image';
@@ -19,7 +19,7 @@ export default async function SinglePainting(props: SinglePaintingProps) {
 
   return (
     <Grid container marginBottom={"2rem"} spacing={2}>
-      <Grid sx={{ xs: 12, md: 6 }} className='p-4'>
+      <Grid className='p-4' size={{ xs: 12, md: 6 }}>
         <Stack spacing={2}>
           <Typography variant='h3'>{ painting.title }</Typography>
           <Typography variant='h4' sx={{ fontFamily: 'cursive' }}>{ painting.artist }</Typography>
@@ -39,7 +39,7 @@ export default async function SinglePainting(props: SinglePaintingProps) {
         </Stack>
         {
           painting.imageExists && (
-            <Grid sx={{ xs: 12, md: 6 }} className='pb-6'>
+            <Grid size={{ xs: 12, md: 6 }} className='pb-6'>
               <Image 
                 src={getFirstPaintingImagePath(painting.id, painting.images)}
                 alt={painting.title}
