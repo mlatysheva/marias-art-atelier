@@ -17,5 +17,5 @@ export default function Checkout({ paintingId }: CheckoutProps) {
     });
   };    
 
-  return <Button variant='contained' className='max-w-[25%]' onClick={handleCheckout}>Buy now</Button>;
+  return <Button variant='contained' sx={{ width: '150px' }} onClick={handleCheckout}>Buy now</Button>;
 }

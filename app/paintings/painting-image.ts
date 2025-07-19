@@ -5,7 +5,7 @@ export const getFirstPaintingImagePath = (paintingId: string, paintingImages: st
 }
 
 export const getPaintingImages = async (paintingId: string): Promise<string[]> => {
-  const folderPath = `/images/paintings/${paintingId}`;
+  const folderPath = `${API_URL}/images/paintings/${paintingId}`;
   const res = await fetch(folderPath);
   if (!res.ok) {
     return [];
