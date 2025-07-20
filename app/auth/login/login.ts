@@ -25,17 +25,10 @@ export default async function login(_prevState: FormResponse, formData: FormData
   }
 
   // Set the authentication cookie received from the server
-  setAuthCookie(response);
-  
-  revalidatePath('/');
-  redirect('/');
-}
-
-export const setAuthCookie = async (response: Response) => {
   const setCookieHeader = response.headers.get('Set-Cookie');
   if (setCookieHeader) {
-    // Parse the token from the Set-Cookie header
     const token = setCookieHeader.split(';')[0].split('=')[1];
+
     (await cookies()).set({
       name: AUTHENTICATION_COOKIE,
       value: token,
@@ -44,4 +37,7 @@ export const setAuthCookie = async (response: Response) => {
       expires: new Date(jwtDecode(token).exp! * 1000),
     });
   }
+  
+  revalidatePath('/');
+  redirect('/');
 }

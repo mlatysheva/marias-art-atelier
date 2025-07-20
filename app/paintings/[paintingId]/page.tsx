@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import { Typography, Stack, Box } from '@mui/material';
 import getPainting from './get-painting';
 import PaintingImageSlider from './painting-images-slider';

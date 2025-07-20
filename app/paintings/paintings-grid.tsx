@@ -1,7 +1,7 @@
 "use client";
 
 import { Painting as IPainting } from './interfaces/painting.interface';
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Painting from './painting';
 import { useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
