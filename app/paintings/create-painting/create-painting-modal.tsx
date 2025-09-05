@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import generateDescriptionFromTags from './generate-description';
 
 
 interface CreatePaintingModalProps {
@@ -20,6 +21,9 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
   const [response, setResponse] = useState<FormResponse>();
   const [year, setYear] = useState(dayjs().year());
   const [fileNames, setFileNames] = useState<string[]>([]);
+  const [tags, setTags] = useState("");
+  const [description, setDescription] = useState("");
+  const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
 
   const styles = {
     position: "absolute",
@@ -59,6 +63,25 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
     setFileNames([]);
   }
 
+  const handleGenerate = async () => {
+    if (!tags) return;
+
+    const tagsArray = tags.split(",").map(t => t.trim()).filter(Boolean);
+
+    if (tags.length === 0) return;
+
+    setIsGeneratingDescription(true);
+
+    try {
+      const generatedDescription = await generateDescriptionFromTags(tagsArray);
+      setDescription(generatedDescription);
+    } catch (e) {
+      console.error("Failed to generate description:", e);
+    } finally {
+      setIsGeneratingDescription(false);
+    }
+  };
+
   const postPainting = async(formData: FormData) => {
     const response = await createPainting(formData);
     setResponse(response);
@@ -85,14 +108,17 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
             action={postPainting}
             >
             <Stack spacing={2}>
-              <TextField name="title" label='Title' variant='outlined' required />
               <TextField 
-                name="description" 
-                multiline
-                minRows={2}
-                maxRows={5}
-                label='Description' 
-                variant='outlined'
+                name="title" 
+                label='Title' 
+                variant='outlined' 
+                required
+                placeholder='Title for the painting'
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
               />
               <TextField 
                 name="tags"
@@ -102,8 +128,48 @@ export default function CreatePaintingModal({ open, handleClose }: CreatePaintin
                 maxRows={2}
                 label='Tags' 
                 variant='outlined'
+                onChange={(e) => setTags(e.target.value)}
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
               />
-              <TextField name="artist" label='Artist' defaultValue="Maria Latysheva" variant='outlined' />
+              <Button 
+                variant="outlined" 
+                onClick={handleGenerate}
+                disabled={isGeneratingDescription}
+              >
+                {isGeneratingDescription ? "Generating description..." : "Generate description with Open AI"}
+              </Button>
+
+              <TextField 
+                name="description" 
+                multiline
+                minRows={2}
+                maxRows={5}
+                placeholder='Describe the painting or use the tags above to generate the description with Open AI'
+                label='Description' 
+                variant='outlined'
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+              />
+              <TextField 
+                name="artist" 
+                label='Artist' 
+                variant='outlined' 
+                placeholder='Name of the artist'
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+              />
               
               <p>Year</p>            
               <YearCalendar
