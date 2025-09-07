@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 interface PaintingProps {
   painting: Painting
 }
+
 export default function Painting({ painting} : PaintingProps) {
   const router = useRouter();
 
@@ -29,7 +30,6 @@ export default function Painting({ painting} : PaintingProps) {
 
         />
         }
-        <Typography>{painting.description}</Typography>
         <Typography>{painting.year}</Typography>
         <Typography>{painting.dimensions[0]} cm x {painting.dimensions[1]} cm</Typography>
         <Typography>{painting.materials[0]}, {painting.materials[1]}</Typography>
