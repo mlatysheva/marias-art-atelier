@@ -8,8 +8,28 @@ import { cookies } from 'next/headers';
 import { jwtDecode } from 'jwt-decode';
 import { AUTHENTICATION_COOKIE } from '../auth-cookie';
 import { revalidatePath } from 'next/cache';
+import { loginSchema } from './login-validation-schema';
+import z from 'zod';
 
 export default async function login(_prevState: FormResponse, formData: FormData) {
+
+  const loginFormData = Object.fromEntries(formData.entries());
+  
+  const validatedLoginFormData = loginSchema.safeParse(loginFormData);
+
+  // Validate on the client side
+  if (!validatedLoginFormData.success) {
+    
+    const formFieldErrors = z.treeifyError(validatedLoginFormData.error);
+    return {
+      errors: {
+        email: formFieldErrors?.properties?.email?.errors,
+        password: formFieldErrors?.properties?.password?.errors,
+      },
+      error: ''
+    };
+  }
+
   const response = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
     headers: {

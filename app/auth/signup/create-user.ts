@@ -5,6 +5,7 @@ import { post } from '../../shared/utils/fetch';
 import { revalidatePath } from 'next/cache';
 import { signupSchema } from './signup-validation-schema';
 import { SignupState } from '../../shared/interfaces/signup-state.interface';
+import z from 'zod';
 
 export default async function createUser(_prevState: SignupState, formData: FormData) {
   const signupFormData = Object.fromEntries(formData.entries());
@@ -13,16 +14,17 @@ export default async function createUser(_prevState: SignupState, formData: Form
 
   // Validate on the client side
   if (!validatedSignupFormData.success) {
-    const formFieldErrors =
+    const formFieldErrors2 =
     validatedSignupFormData.error.flatten().fieldErrors;
+    const formFieldErrors = z.treeifyError(validatedSignupFormData.error);
 
     return {
       errors: {
-        firstName: formFieldErrors?.firstName,
-        lastName: formFieldErrors?.lastName,
-        username: formFieldErrors?.username,
-        email: formFieldErrors?.email,
-        password: formFieldErrors?.password,
+        firstName: formFieldErrors?.properties?.firstName?.errors,
+        lastName: formFieldErrors?.properties?.lastName?.errors,
+        username: formFieldErrors?.properties?.username?.errors,
+        email: formFieldErrors?.properties?.email?.errors,
+        password: formFieldErrors?.properties?.password?.errors,
       },
       error: ''
     };
