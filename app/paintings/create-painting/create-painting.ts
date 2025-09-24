@@ -20,7 +20,7 @@ export async function uploadPaintingImages(paintingId: string, files: File[]) {
   const formData = new FormData();
   files.forEach((file) => formData.append("image", file));
   
-  await fetch (`${API_URL}/paintings/${paintingId}/images`, {
+  await fetch(`${API_URL}/paintings/${paintingId}/images`, {
     body: formData,
     method: 'POST',
     headers: await getHeaders(),

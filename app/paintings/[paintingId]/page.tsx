@@ -4,6 +4,7 @@ import getPainting from './get-painting';
 import PaintingImageSlider from './painting-images-slider';
 import Checkout from '../../checkout/checkout';
 import { API_URL } from '../../shared/constants/api';
+import DeletePainting from './delete-painting/delete-painting';
 
 interface SinglePaintingProps {
   params: Promise<{ paintingId: string }>;
@@ -52,6 +53,7 @@ export default async function SinglePainting(props: SinglePaintingProps) {
             )}
             <Typography variant='h5'>€{painting.price}</Typography>
             <Checkout paintingId={painting.id} />
+            <DeletePainting paintingId={painting.id} />
           </Stack>
         </Grid>
       </Grid>
