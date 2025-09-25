@@ -144,6 +144,7 @@ export default function Header({ logout }: HeaderProps) {
 
 const UserSettings = ({logout}: HeaderProps) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const router = useRouter();
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -181,6 +182,12 @@ const UserSettings = ({logout}: HeaderProps) => {
           handleCloseUserMenu();
         }}>
           <Typography sx={{ textAlign: 'center' }}>Logout</Typography>
+        </MenuItem>
+        <MenuItem key="ManagePaintings" onClick={async() => {
+          router.push('/manage-paintings');
+          handleCloseUserMenu();
+        }}>
+          <Typography sx={{ textAlign: 'center' }}>Manage paintings</Typography>
         </MenuItem>
       </Menu>
     </Box>

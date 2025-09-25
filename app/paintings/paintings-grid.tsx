@@ -11,9 +11,10 @@ import getAuthentication from '../auth/actions/get-authentication';
 
 interface PaintingsGridProps {
   paintings: IPainting[];
+  adminView?: boolean;
 }
 
-export default function PaintingsGrid({ paintings }: PaintingsGridProps) {
+export default function PaintingsGrid({ paintings, adminView = false }: PaintingsGridProps) {
   useEffect(() => {
     let socket: Socket;
 
@@ -37,7 +38,7 @@ export default function PaintingsGrid({ paintings }: PaintingsGridProps) {
     <Grid container spacing={3}>
       {paintings.map((painting) => (
         <Grid key={painting.id} size={{ xs: 12, md: 6, lg: 4 }} >
-          <Painting painting={painting}/>
+          <Painting painting={painting} adminView={adminView} />
         </Grid>
       ))}
     </Grid>

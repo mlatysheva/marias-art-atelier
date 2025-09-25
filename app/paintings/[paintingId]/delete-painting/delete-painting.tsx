@@ -1,20 +1,37 @@
 "use client";
+
 import React from 'react';
-import { Button } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
+import DeleteIcon from "@mui/icons-material/Delete";
 import deletePainting from './actions/delete-painting';
+import { useRouter } from 'next/navigation';
 
 interface DeletePaintingProps {
   paintingId: string;
 }
 
 export default function DeletePainting({ paintingId }: DeletePaintingProps) {
-  const handleDelete = async (e: { preventDefault: () => void; }) => {
+  const router = useRouter();
+
+  const handleDelete = async (e: React.MouseEvent) => {
     e.preventDefault();
     const confirmed = confirm("Are you sure you want to delete this painting?");
     if (!confirmed) return;
 
-    await deletePainting(paintingId);
+    const result = await deletePainting(paintingId);
+    if (result.ok) {
+      router.push('/');   
+      router.refresh(); 
+    } else {
+      alert("Failed to delete painting");
+    }
   };
 
-  return <Button variant='contained' color="error" className="mt-3" sx={{ width: '150px' }} onClick={handleDelete}>Delete</Button>;
+  return (
+    <Tooltip title="Delete painting" arrow>
+      <IconButton aria-label="delete" onClick={handleDelete}>
+        <DeleteIcon />
+      </IconButton>
+    </Tooltip>
+  )
 }
