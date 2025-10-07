@@ -30,34 +30,39 @@ export default async function login(_prevState: FormResponse, formData: FormData
     };
   }
 
-  const response = await fetch(`${API_URL}/auth/login`, {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(Object.fromEntries(formData)),
-  });
-
-  const parsedResponse = await response.json();
-
-  if (!response.ok) {
-    return {error: getErrorMessage(parsedResponse)};
-  }
-
-  // Set the authentication cookie received from the server
-  const setCookieHeader = response.headers.get('Set-Cookie');
-  if (setCookieHeader) {
-    const token = setCookieHeader.split(';')[0].split('=')[1];
-
-    (await cookies()).set({
-      name: AUTHENTICATION_COOKIE,
-      value: token,
-      secure: false,
-      httpOnly: true,
-      expires: new Date(jwtDecode(token).exp! * 1000),
+  try {
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(Object.fromEntries(formData)),
     });
+
+    const parsedResponse = await response.json();
+
+    if (!response.ok) {
+      return { error: getErrorMessage(parsedResponse) };
+    }
+
+    // Set the authentication cookie received from the server
+    const setCookieHeader = response.headers.get('Set-Cookie');
+    if (setCookieHeader) {
+      const token = setCookieHeader.split(';')[0].split('=')[1];
+
+      (await cookies()).set({
+        name: AUTHENTICATION_COOKIE,
+        value: token,
+        secure: false,
+        httpOnly: true,
+        expires: new Date(jwtDecode(token).exp! * 1000),
+      });
+    }
+  } catch (err: any) {
+       console.error("Login error:", err);
+    return { error: "Could not reach the server. Please try again later." };
   }
-  
+
   revalidatePath('/');
   redirect('/');
 }
