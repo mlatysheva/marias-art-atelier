@@ -58,8 +58,8 @@ export default async function login(_prevState: FormResponse, formData: FormData
         expires: new Date(jwtDecode(token).exp! * 1000),
       });
     }
-  } catch (err: any) {
-       console.error("Login error:", err);
+  } catch (err) {
+    console.error("Login error:", err);
     return { error: "Could not reach the server. Please try again later." };
   }
 
