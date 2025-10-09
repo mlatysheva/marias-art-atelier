@@ -10,22 +10,38 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import generateDescriptionFromTags from '../../paintings/create-painting/generate-description';
 import { FormResponse } from '../../shared/interfaces/form-response.interface';
-import { ChangeEvent, useState } from 'react';
-import createPainting from '../../paintings/create-painting/create-painting';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Painting } from '../../paintings/interfaces/painting.interface';
+import updatePainting from './update-painting';
+import { useParams } from 'next/navigation';
+import getPainting from '../../paintings/[paintingId]/get-painting';
 
 interface EditPaintingProps {
   painting: Painting;
-  adminView?: boolean;
 }
 
 export default function EditPainting(props: EditPaintingProps) {
-  const painting = props.painting;
+  const { paintingId } = useParams(); 
+  const [painting, setPainting] = useState<Painting | null>(null);
+
+  useEffect(() => {
+    const fetchPainting = async () => {
+      const result = await getPainting(paintingId as string);
+      setPainting(result);
+    };
+    fetchPainting();
+  }, [paintingId]);
+
+  
+  if (!painting) {
+    return <p>Painting not found</p>;
+  }
+
   const [response, setResponse] = useState<FormResponse>();
-  const [year, setYear] = useState(dayjs().year());
-  const [fileNames, setFileNames] = useState<string[]>([]);
-  const [tags, setTags] = useState("");
-  const [description, setDescription] = useState("");
+  const [year, setYear] = useState(painting.year);
+  const [fileNames, setFileNames] = useState<string[]>(painting.images);
+  const [tags, setTags] = useState(painting.tags ? painting.tags.join(', ') : '');
+  const [description, setDescription] = useState(painting.description);
   const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
 
   const styles = {
@@ -63,7 +79,7 @@ export default function EditPainting(props: EditPaintingProps) {
   const handleGenerate = async () => {
     if (!tags) return;
 
-    const tagsArray = tags.split(",").map(t => t.trim()).filter(Boolean);
+    const tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
     if (tags.length === 0) return;
 
@@ -80,7 +96,7 @@ export default function EditPainting(props: EditPaintingProps) {
   };
 
   const postPainting = async(formData: FormData) => {
-    const response = await createPainting(formData);
+    const response = await updatePainting(painting.id, formData);
     setResponse(response);
   }
 
@@ -90,21 +106,16 @@ export default function EditPainting(props: EditPaintingProps) {
       setFileNames(fileNames); 
     }
   }
-  
 
-  if (!painting) {
-    return <p>Painting not found</p>;
+  const navigateBack = () => {
+    window.history.back();
   }
-
-  const imageUrls = painting.images.map(
-    (img) => `${API_URL}/images/paintings/${painting.id}/${img}`
-  );
 
   return (
     <Box sx={{ marginBottom: '2rem' }}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Box sx={styles}>
-          <Typography variant="h5" sx={{ mb: 2, textAlign: 'center' }}>Add a new painting</Typography>
+          <Typography variant="h5" sx={{ mb: 2, textAlign: 'center' }}>Edit the painting</Typography>
           <form 
             className="w-full" 
             action={postPainting}
@@ -115,6 +126,7 @@ export default function EditPainting(props: EditPaintingProps) {
                 label='Title' 
                 variant='outlined' 
                 required
+                value={painting.title}
                 placeholder='Title for the painting'
                 slotProps={{
                   inputLabel: {
@@ -130,6 +142,7 @@ export default function EditPainting(props: EditPaintingProps) {
                 maxRows={2}
                 label='Tags' 
                 variant='outlined'
+                value={tags}
                 onChange={(e) => setTags(e.target.value)}
                 slotProps={{
                   inputLabel: {
@@ -166,6 +179,7 @@ export default function EditPainting(props: EditPaintingProps) {
                 label='Artist' 
                 variant='outlined' 
                 placeholder='Name of the artist'
+                value={painting.artist}
                 slotProps={{
                   inputLabel: {
                     shrink: true,
@@ -178,7 +192,8 @@ export default function EditPainting(props: EditPaintingProps) {
                 yearsPerRow={4} 
                 maxDate={currentYear} 
                 minDate={minYear} 
-                onChange={(date) => setYear(dayjs(date).year())}
+                value={dayjs().year(painting.year)}
+                onChange={(date) => setYear(date.year)}
                 yearsOrder="desc" 
                 sx={{
                   height: 100,
@@ -186,7 +201,7 @@ export default function EditPainting(props: EditPaintingProps) {
               />
 
               {/* Hidden input to pass the selected year in formData */}
-              <input type="hidden" name="year" value={year ?? currentYear}/>
+              <input type="hidden" name="year" value={year}/>
 
               <FormControl fullWidth sx={{ m: 1 }}>
                 <InputLabel htmlFor="price">Price</InputLabel>
@@ -196,6 +211,7 @@ export default function EditPainting(props: EditPaintingProps) {
                   startAdornment={<InputAdornment position="start">€</InputAdornment>}
                   label="Price"
                   type='number'
+                  value={painting.price}
                   required
                   slotProps={{
                     input: {
@@ -215,6 +231,7 @@ export default function EditPainting(props: EditPaintingProps) {
                     name="width"
                     type="number"
                     defaultValue={'40'}
+                    value={painting.dimensions ? painting.dimensions[0] : ''}
                     endAdornment={<InputAdornment position="end">cm</InputAdornment>}
                     slotProps={{
                       input: {
@@ -230,6 +247,7 @@ export default function EditPainting(props: EditPaintingProps) {
                     name="height"
                     type="number"
                     defaultValue={'30'}
+                    value={painting.dimensions ? painting.dimensions[1] : ''}
                     endAdornment={<InputAdornment position="end">cm</InputAdornment>}
                     slotProps={{
                       input: {
@@ -244,7 +262,7 @@ export default function EditPainting(props: EditPaintingProps) {
               <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
                 <FormControl sx={{ m: 1, width: '50%' }} variant="outlined">
                   <InputLabel id="medim-label">Medium</InputLabel>
-                  <Select name="medium" id="medium" label="Medium" labelId="medium-label" variant='outlined' defaultValue={''}>
+                  <Select name="medium" id="medium" label="Medium" labelId="medium-label" variant='outlined' defaultValue={''} value={painting.materials ? painting.materials[0] : ''}>
                     <MenuItem value="Oil">Oil</MenuItem>
                     <MenuItem value="Watercolor">Watercolor</MenuItem>
                     <MenuItem value="Pastels">Pastels</MenuItem>
@@ -253,7 +271,7 @@ export default function EditPainting(props: EditPaintingProps) {
                 </FormControl>
                 <FormControl sx={{ m: 1, width: '50%' }} variant="outlined">
                   <InputLabel id="base-label">Base</InputLabel>
-                  <Select name="base" id="base" label='Base' labelId="base-label" variant='outlined' defaultValue={''}>
+                  <Select name="base" id="base" label='Base' labelId="base-label" variant='outlined' defaultValue={''} value={painting.materials ? painting.materials[1] : ''}>
                     <MenuItem value="Streched Canvas">Streched canvas</MenuItem>
                     <MenuItem value="Canvas on Board">Canvas on carton</MenuItem>
                     <MenuItem value="Paper">Paper</MenuItem>
@@ -286,8 +304,8 @@ export default function EditPainting(props: EditPaintingProps) {
               )}
 
               <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
-                <Button variant='outlined' style={{width: '50%'}} type="button" onClick={() => {handleClose()}}>Cancel</Button>           
-                <Button variant='contained' style={{width: '50%'}} type="submit">Create</Button>
+                <Button variant='outlined' style={{width: '50%'}} type="button" onClick={() => {navigateBack()}}>Cancel</Button>           
+                <Button variant='contained' style={{width: '50%'}} type="submit">Update</Button>
               </Stack>
             </Stack>
           </form>
