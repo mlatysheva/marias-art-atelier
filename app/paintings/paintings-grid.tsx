@@ -19,11 +19,9 @@ export default function PaintingsGrid({ paintings, adminView = false }: Painting
     let socket: Socket;
 
     const createSocket = async() => {
-      const authentication = await getAuthentication();
-
       socket = io(API_URL, {
         auth: {
-          Authentication: authentication?.value,
+          Authentication: await getAuthentication(),
         },
       });
   

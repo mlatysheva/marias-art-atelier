@@ -1,14 +1,7 @@
 import { cookies } from 'next/headers';
-import { AUTHENTICATION_COOKIE, REFRESH_COOKIE } from '../auth-cookie';
-import { hasTokenExpired } from './get-authentication';
+import { AUTHENTICATION_COOKIE } from '../auth-cookie';
 
 export default async function authenticated() {
-  const cookie = await cookies();
-  const authentication = cookie.get(AUTHENTICATION_COOKIE);
-
-  if (authentication?.value && !hasTokenExpired(authentication.value)) {
-    return true;
-  }
-
-  return !!cookie.get(REFRESH_COOKIE)?.value;
+  // .value should be used because logout() action sets the cookie value to an empty string
+  return !!(await cookies()).get(AUTHENTICATION_COOKIE)?.value;
 }
