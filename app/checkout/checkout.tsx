@@ -2,7 +2,6 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import checkout from './actions/checkout';
-import getStripe from './stripe';
 
 interface CheckoutProps {
   paintingId: string;
