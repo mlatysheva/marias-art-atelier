@@ -22,7 +22,7 @@ export default function EditPaintingForm(props: EditPaintingProps) {
 
   const [response, setResponse] = useState<FormResponse | null>(null);
   const [title, setTitle] = useState(painting.title);
-  const [tags, setTags] = useState(painting.tags ? painting.tags.join(', ') : '');
+  const [tags, setTags] = useState(painting.tags);
   const [description, setDescription] = useState(painting.description);
   const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
   const [artist, setArtist] = useState(painting.artist);
@@ -69,14 +69,12 @@ export default function EditPaintingForm(props: EditPaintingProps) {
   const handleGenerate = async () => {
     if (!tags) return;
 
-    const tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-
     if (tags.length === 0) return;
 
     setIsGeneratingDescription(true);
 
     try {
-      const generatedDescription = await generateDescriptionFromTags(tagsArray);
+      const generatedDescription = await generateDescriptionFromTags(tags);
       setDescription(generatedDescription);
     } catch (e) {
       console.error("Failed to generate description:", e);
@@ -134,7 +132,7 @@ export default function EditPaintingForm(props: EditPaintingProps) {
                 label='Tags' 
                 variant='outlined'
                 value={tags}
-                onChange={(e) => setTags(e.target.value)}
+                onChange={(e) => setTags(e.target.value.split(',').map(tag => tag.trim()))}
                 slotProps={{
                   inputLabel: {
                     shrink: true,
@@ -185,7 +183,7 @@ export default function EditPaintingForm(props: EditPaintingProps) {
                 maxDate={currentYear} 
                 minDate={minYear} 
                 value={dayjs().year(year)}
-                onChange={(date) => setYear(date.year)}
+                onChange={(date) => date && setYear(date.year())}
                 yearsOrder="desc" 
                 sx={{
                   height: 100,
@@ -255,7 +253,7 @@ export default function EditPaintingForm(props: EditPaintingProps) {
               <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
                 <FormControl sx={{ m: 1, width: '50%' }} variant="outlined">
                   <InputLabel id="medim-label">Medium</InputLabel>
-                  <Select name="medium" id="medium" label="Medium" labelId="medium-label" variant='outlined' defaultValue={''} value={medium} onChange={() => setMedium(e.target.value)}>
+                  <Select name="medium" id="medium" label="Medium" labelId="medium-label" variant='outlined' defaultValue={''} value={medium} onChange={(e) => setMedium(e.target.value)}>
                     <MenuItem value="Oil">Oil</MenuItem>
                     <MenuItem value="Watercolor">Watercolor</MenuItem>
                     <MenuItem value="Pastels">Pastels</MenuItem>
@@ -264,7 +262,7 @@ export default function EditPaintingForm(props: EditPaintingProps) {
                 </FormControl>
                 <FormControl sx={{ m: 1, width: '50%' }} variant="outlined">
                   <InputLabel id="base-label">Base</InputLabel>
-                  <Select name="base" id="base" label='Base' labelId="base-label" variant='outlined' defaultValue={''} value={base} onChange={() => setBase(e.target.value)}>
+                  <Select name="base" id="base" label='Base' labelId="base-label" variant='outlined' defaultValue={''} value={base} onChange={(e) => setBase(e.target.value)}>
                     <MenuItem value="Streched Canvas">Streched canvas</MenuItem>
                     <MenuItem value="Canvas on Board">Canvas on carton</MenuItem>
                     <MenuItem value="Paper">Paper</MenuItem>

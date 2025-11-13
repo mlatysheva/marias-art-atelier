@@ -14,8 +14,6 @@ export default async function createUser(_prevState: SignupState, formData: Form
 
   // Validate on the client side
   if (!validatedSignupFormData.success) {
-    const formFieldErrors2 =
-    validatedSignupFormData.error.flatten().fieldErrors;
     const formFieldErrors = z.treeifyError(validatedSignupFormData.error);
 
     return {

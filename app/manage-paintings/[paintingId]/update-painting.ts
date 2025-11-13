@@ -1,11 +1,11 @@
 "use server";
 
 import { revalidateTag } from 'next/cache';
-import { getHeaders, post } from '../../shared/utils/fetch';
+import { getHeaders, patch } from '../../shared/utils/fetch';
 import { API_URL } from '../../shared/constants/api';
 
 export default async function updatePainting(paintingId: string, formData: FormData) {
-  const response = await post(`paintings/${paintingId}`, formData);
+  const response = await patch(`paintings/${paintingId}`, formData);
   const paintingImages = formData.getAll('image') as File[];
   
   if (paintingImages.length > 0 && !response.error) {
