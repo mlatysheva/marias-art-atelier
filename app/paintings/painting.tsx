@@ -82,7 +82,6 @@ export default function Painting({
         <Typography>
           {painting.materials[0]}, {painting.materials[1]}
         </Typography>
-        <Typography>{painting.tags.map((tag) => tag + ", ")}</Typography>
         <Typography>€{painting.price}</Typography>
       </CardActionArea>
     </Card>

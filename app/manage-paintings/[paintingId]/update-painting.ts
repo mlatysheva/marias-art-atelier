@@ -1,11 +1,33 @@
 "use server";
 
 import { revalidateTag } from 'next/cache';
-import { getHeaders, post } from '../../shared/utils/fetch';
-import { API_URL } from '../../shared/constants/api';
+import { patch } from '../../shared/utils/fetch';
+import { uploadPaintingImages } from '../../paintings/create-painting/create-painting';
 
 export default async function updatePainting(paintingId: string, formData: FormData) {
-  const response = await post(`paintings/${paintingId}`, formData);
+  const payload: Record<string, unknown> = {};
+
+  formData.forEach((value, key) => {
+    if (key === 'image') return;
+    payload[key] = value;
+  });
+
+  if (typeof payload.tags === 'string') {
+    payload.tags = payload.tags
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter(Boolean)
+      .join(', ');
+  }
+
+  ['year', 'price', 'width', 'height'].forEach((field) => {
+    const value = payload[field];
+    if (typeof value === 'string' && value.length > 0) {
+      payload[field] = Number(value);
+    }
+  });
+
+  const response = await patch(`paintings/${paintingId}`, payload);
   const paintingImages = formData.getAll('image') as File[];
   
   if (paintingImages.length > 0 && !response.error) {
@@ -14,15 +36,4 @@ export default async function updatePainting(paintingId: string, formData: FormD
 
   revalidateTag('paintings');
   return response;
-}
-
-export async function uploadPaintingImages(paintingId: string, files: File[]) {
-  const formData = new FormData();
-  files.forEach((file) => formData.append("image", file));
-  
-  await fetch(`${API_URL}/paintings/${paintingId}/images`, {
-    body: formData,
-    method: 'POST',
-    headers: await getHeaders(),
-  });  
 }

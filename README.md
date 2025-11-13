@@ -61,6 +61,8 @@ Having clicked on the `Buy` button, the user is taken to the `Stipe` payment sys
 
 ![Stripe payment screen](screenshots/stripe_payment_screen.png)
 
+Use a Stripe test bank card from this page: https://docs.stripe.com/testing to make the purchase.
+
 After a successful purchase, the list of available paintings is updated in real time using websocket connection:
 
 ![Available paintings after purchase](screenshots/paintings_after_payment.png)
