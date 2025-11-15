@@ -1,11 +1,15 @@
 "use server";
 
 import { revalidateTag } from 'next/cache';
-import { getHeaders, patch } from '../../shared/utils/fetch';
-import { API_URL } from '../../shared/constants/api';
+import { patch } from '../../shared/utils/fetch';
+import { uploadPaintingImages } from '../../paintings/create-painting/create-painting';
 
 export default async function updatePainting(paintingId: string, formData: FormData) {
-  const response = await patch(`paintings/${paintingId}`, formData);
+  const payload = Object.fromEntries(formData.entries());
+  // Remove images from payload
+  delete payload.image; 
+
+  const response = await patch(`paintings/${paintingId}`, payload);
   const paintingImages = formData.getAll('image') as File[];
   
   if (paintingImages.length > 0 && !response.error) {
@@ -14,15 +18,4 @@ export default async function updatePainting(paintingId: string, formData: FormD
 
   revalidateTag('paintings');
   return response;
-}
-
-export async function uploadPaintingImages(paintingId: string, files: File[]) {
-  const formData = new FormData();
-  files.forEach((file) => formData.append("image", file));
-  
-  await fetch(`${API_URL}/paintings/${paintingId}/images`, {
-    body: formData,
-    method: 'POST',
-    headers: await getHeaders(),
-  });  
 }

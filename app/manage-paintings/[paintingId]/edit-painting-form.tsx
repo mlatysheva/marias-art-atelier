@@ -86,6 +86,9 @@ export default function EditPaintingForm(props: EditPaintingProps) {
   const postPainting = async(formData: FormData) => {
     const response = await updatePainting(painting.id, formData);
     setResponse(response);
+    if (!response.error)  {
+      navigateBack();
+    }
   }
 
   const renderFileNames = (event: ChangeEvent<HTMLInputElement>) => {
