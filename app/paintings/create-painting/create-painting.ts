@@ -9,10 +9,10 @@ export default async function createPainting(formData: FormData) {
   const paintingImages = formData.getAll('image') as File[];
   
   if (paintingImages.length > 0 && !response.error) {
-    uploadPaintingImages(response.data.id, paintingImages);
+    await uploadPaintingImages(response.data.id, paintingImages);
   }
 
-  revalidateTag('paintings');
+  revalidateTag('paintings', 'max');
   return response;
 }
 

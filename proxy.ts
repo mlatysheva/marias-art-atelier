@@ -3,7 +3,7 @@ import { publicRoutes } from './app/shared/constants/routes';
 import authenticated from './app/auth/actions/authenticated';
 
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const isPublicRoute = publicRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route.path)
   );
