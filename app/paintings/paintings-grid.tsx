@@ -36,7 +36,7 @@ export default function PaintingsGrid({ paintings, adminView = false }: Painting
 
   return(
     <Grid container spacing={3}>
-      {paintings.map((painting) => (
+      {paintings?.map((painting) => (
         <Grid key={painting.id} size={{ xs: 12, md: 6, lg: 4 }} >
           <Painting painting={painting} adminView={adminView} />
         </Grid>

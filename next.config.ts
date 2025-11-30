@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
+    // Bypass Next.js image optimization so the browser requests files directly
+    // from the backend.
+    unoptimized: true,
     remotePatterns: [
       {
         hostname: process.env.PAINTING_IMAGE_HOST || 'localhost',
