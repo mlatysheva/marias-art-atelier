@@ -1,4 +1,4 @@
-"use server";
+'use server';
 import { post } from '../../shared/utils/fetch';
 
 export default async function checkout(paintingId: string) {

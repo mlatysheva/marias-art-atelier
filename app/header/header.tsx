@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -24,7 +24,7 @@ interface HeaderProps {
 }
 
 export default function Header({ logout }: HeaderProps) {
-  const isAuthenticated  = useContext(AuthContext);
+  const isAuthenticated = useContext(AuthContext);
   const router = useRouter();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -43,7 +43,9 @@ export default function Header({ logout }: HeaderProps) {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <ShoppingBasketIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <ShoppingBasketIcon
+            sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
+          />
           <Typography
             variant="h6"
             noWrap
@@ -91,16 +93,23 @@ export default function Header({ logout }: HeaderProps) {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.title} onClick={() => {
-                  router.push(page.path);
-                  handleCloseNavMenu();
-                }}>
-                  <Typography sx={{ textAlign: 'center' }}>{page.title}</Typography>
+                <MenuItem
+                  key={page.title}
+                  onClick={() => {
+                    router.push(page.path);
+                    handleCloseNavMenu();
+                  }}
+                >
+                  <Typography sx={{ textAlign: 'center' }}>
+                    {page.title}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <ShoppingBasketIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <ShoppingBasketIcon
+            sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}
+          />
           <Typography
             variant="h6"
             noWrap
@@ -134,15 +143,14 @@ export default function Header({ logout }: HeaderProps) {
               </Button>
             ))}
           </Box>
-          {isAuthenticated && <UserSettings logout={logout}/>}
+          {isAuthenticated && <UserSettings logout={logout} />}
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
 
-
-const UserSettings = ({logout}: HeaderProps) => {
+const UserSettings = ({ logout }: HeaderProps) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const router = useRouter();
 
@@ -177,19 +185,25 @@ const UserSettings = ({logout}: HeaderProps) => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <MenuItem key="Logout" onClick={async() => {
-          await logout();
-          handleCloseUserMenu();
-        }}>
+        <MenuItem
+          key="Logout"
+          onClick={async () => {
+            await logout();
+            handleCloseUserMenu();
+          }}
+        >
           <Typography sx={{ textAlign: 'center' }}>Logout</Typography>
         </MenuItem>
-        <MenuItem key="ManagePaintings" onClick={async() => {
-          router.push('/manage-paintings');
-          handleCloseUserMenu();
-        }}>
+        <MenuItem
+          key="ManagePaintings"
+          onClick={async () => {
+            router.push('/manage-paintings');
+            handleCloseUserMenu();
+          }}
+        >
           <Typography sx={{ textAlign: 'center' }}>Manage paintings</Typography>
         </MenuItem>
       </Menu>
     </Box>
-  )
-}
+  );
+};

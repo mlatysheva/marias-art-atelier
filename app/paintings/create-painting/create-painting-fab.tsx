@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -10,8 +10,11 @@ export default function CreatePaintingFab() {
 
   return (
     <>
-      <CreatePaintingModal open={modalVisible} handleClose={() => setModalVisible(false)} />
-      <div className='absolute right-10 bottom-10'>
+      <CreatePaintingModal
+        open={modalVisible}
+        handleClose={() => setModalVisible(false)}
+      />
+      <div className="absolute right-10 bottom-10">
         <Fab
           color="primary"
           aria-label="add"
@@ -26,6 +29,5 @@ export default function CreatePaintingFab() {
         </Fab>
       </div>
     </>
-    
   );
 }

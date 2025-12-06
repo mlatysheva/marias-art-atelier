@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 import { redirect } from 'next/navigation';
 import { post } from '../../shared/utils/fetch';
@@ -7,7 +7,10 @@ import { signupSchema } from './signup-validation-schema';
 import { SignupState } from '../../shared/interfaces/signup-state.interface';
 import z from 'zod';
 
-export default async function createUser(_prevState: SignupState, formData: FormData) {
+export default async function createUser(
+  _prevState: SignupState,
+  formData: FormData,
+) {
   const signupFormData = Object.fromEntries(formData.entries());
 
   const validatedSignupFormData = signupSchema.safeParse(signupFormData);
@@ -24,19 +27,19 @@ export default async function createUser(_prevState: SignupState, formData: Form
         email: formFieldErrors?.properties?.email?.errors,
         password: formFieldErrors?.properties?.password?.errors,
       },
-      error: ''
+      error: '',
     };
   }
-  
+
   // Validate on the server side
-  const { error } = await post("users", formData);
+  const { error } = await post('users', formData);
 
   if (error) {
     return { errors: {}, error };
-  } 
-  
+  }
+
   revalidatePath('/');
-  
+
   // Redirect to the home page after successfully creating a user
   redirect('/');
 }

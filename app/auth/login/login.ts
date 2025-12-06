@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 import { redirect } from 'next/navigation';
 import { API_URL } from '../../shared/constants/api';
@@ -11,22 +11,23 @@ import { revalidatePath } from 'next/cache';
 import { loginSchema } from './login-validation-schema';
 import z from 'zod';
 
-export default async function login(_prevState: FormResponse, formData: FormData) {
-
+export default async function login(
+  _prevState: FormResponse,
+  formData: FormData,
+) {
   const loginFormData = Object.fromEntries(formData.entries());
-  
+
   const validatedLoginFormData = loginSchema.safeParse(loginFormData);
 
   // Validate on the client side
   if (!validatedLoginFormData.success) {
-    
     const formFieldErrors = z.treeifyError(validatedLoginFormData.error);
     return {
       errors: {
         email: formFieldErrors?.properties?.email?.errors,
         password: formFieldErrors?.properties?.password?.errors,
       },
-      error: ''
+      error: '',
     };
   }
 
@@ -34,7 +35,7 @@ export default async function login(_prevState: FormResponse, formData: FormData
     const response = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(Object.fromEntries(formData)),
     });
@@ -59,8 +60,8 @@ export default async function login(_prevState: FormResponse, formData: FormData
       });
     }
   } catch (err) {
-    console.error("Login error:", err);
-    return { error: "Could not reach the server. Please try again later." };
+    console.error('Login error:', err);
+    return { error: 'Could not reach the server. Please try again later.' };
   }
 
   revalidatePath('/');

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React from 'react';
 import { Button } from '@mui/material';
 import checkout from './actions/checkout';
@@ -21,7 +21,15 @@ export default function Checkout({ paintingId }: CheckoutProps) {
     }
 
     window.location.href = sessionUrl;
-  };    
+  };
 
-  return <Button variant='contained' sx={{ width: '150px' }} onClick={handleCheckout}>Buy now</Button>;
+  return (
+    <Button
+      variant="contained"
+      sx={{ width: '150px' }}
+      onClick={handleCheckout}
+    >
+      Buy now
+    </Button>
+  );
 }

@@ -5,6 +5,7 @@
 This is a Next.js React app bootstrapped with `create-next-app`.
 
 The app provides the following functionality supported by the backend app (https://github.com/mlatysheva/marias-art-atelier-backend):
+
 - Signing up a user using validation provided by the `zod` library
 - Authenticating and logging the user based on cookies
 - Providing the list of paintings available for sale
@@ -26,7 +27,7 @@ $ npm install
 $ npm run dev
 ```
 
-## Using the app 
+## Using the app
 
 After installing the dependencies with `npm install` and starting the app with `npm run dev`, the app will be running on `http://localhost:3000/` showing the signup/login screen.
 
@@ -48,7 +49,7 @@ The user can add a painting for sale using the form with `zod` validation:
 
 ![Add new painting](screenshots/add_new_painting_screen.png)
 
-The user can automatically generate a description for the painting with Open AI 
+The user can automatically generate a description for the painting with Open AI
 based on the tags the user has provided:
 
 ![Generate description with Open AI](screenshots/generate_description_with_openAI.png)
@@ -68,6 +69,7 @@ After a successful purchase, the list of available paintings is updated in real 
 ![Available paintings after purchase](screenshots/paintings_after_payment.png)
 
 ## Stack used:
+
 - React
 - Next.js
 - `zod` library to provide validation of user inputs

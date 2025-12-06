@@ -1,4 +1,4 @@
-"use client"; // In order to use the Context API available only on the client side
+'use client'; // In order to use the Context API available only on the client side
 
 import React, { ReactElement } from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
@@ -12,12 +12,11 @@ interface ProvidersProps {
 }
 
 export default function Providers({ children, authenticated }: ProvidersProps) {
-
   return (
     <AppRouterCacheProvider>
-      <ThemeProvider theme={ darkTheme }>
-        <AuthContext.Provider value={ authenticated }>
-          { children }
+      <ThemeProvider theme={darkTheme}>
+        <AuthContext.Provider value={authenticated}>
+          {children}
         </AuthContext.Provider>
       </ThemeProvider>
     </AppRouterCacheProvider>

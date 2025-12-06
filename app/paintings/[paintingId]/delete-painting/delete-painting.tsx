@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { IconButton, Tooltip } from '@mui/material';
-import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteIcon from '@mui/icons-material/Delete';
 import deletePainting from './actions/delete-painting';
 import { useRouter } from 'next/navigation';
 
@@ -15,15 +15,15 @@ export default function DeletePainting({ paintingId }: DeletePaintingProps) {
 
   const handleDelete = async (e: React.MouseEvent) => {
     e.preventDefault();
-    const confirmed = confirm("Are you sure you want to delete this painting?");
+    const confirmed = confirm('Are you sure you want to delete this painting?');
     if (!confirmed) return;
 
     const result = await deletePainting(paintingId);
     if (result.ok) {
-      router.push('/');   
-      router.refresh(); 
+      router.push('/');
+      router.refresh();
     } else {
-      alert("Failed to delete painting");
+      alert('Failed to delete painting');
     }
   };
 
@@ -33,5 +33,5 @@ export default function DeletePainting({ paintingId }: DeletePaintingProps) {
         <DeleteIcon />
       </IconButton>
     </Tooltip>
-  )
+  );
 }

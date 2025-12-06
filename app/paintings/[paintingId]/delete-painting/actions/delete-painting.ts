@@ -2,11 +2,11 @@ import { API_URL } from '../../../../shared/constants/api';
 
 export default async function deletePainting(paintingId: string) {
   const res = await fetch(`${API_URL}/paintings/${paintingId}`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    credentials: "include",
+    credentials: 'include',
   });
   return res;
 }

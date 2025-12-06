@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 import { cookies } from 'next/headers';
 import { AUTHENTICATION_COOKIE } from '../auth-cookie';

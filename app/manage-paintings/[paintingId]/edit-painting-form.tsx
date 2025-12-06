@@ -1,6 +1,22 @@
-"use client";
+'use client';
 
-import { Alert, Box, Button, CSSProperties, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, Stack, TextField, Tooltip, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  CSSProperties,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 
 import { YearCalendar } from '@mui/x-date-pickers/YearCalendar';
 import dayjs from 'dayjs';
@@ -14,8 +30,7 @@ import { Painting } from '../../paintings/interfaces/painting.interface';
 import updatePainting from './update-painting';
 import revalidatePaintings from '../../paintings/actions/revalidate-paintings';
 import { useRouter } from 'next/navigation';
-import DeleteIcon from "@mui/icons-material/Delete";
-
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface EditPaintingProps {
   painting: Painting;
@@ -33,41 +48,49 @@ export default function EditPaintingForm(props: EditPaintingProps) {
   const [artist, setArtist] = useState(painting.artist);
   const [year, setYear] = useState(painting.year);
   const [price, setPrice] = useState(painting.price);
-  const [width, setWidth] = useState(painting.dimensions ? painting.dimensions[0] : '');
-  const [height, setHeight] = useState(painting.dimensions ? painting.dimensions[1] : '');
-  const [medium, setMedium] = useState(painting.materials ? painting.materials[0] : '');
-  const [base, setBase] = useState(painting.materials ? painting.materials[1] : '');
+  const [width, setWidth] = useState(
+    painting.dimensions ? painting.dimensions[0] : '',
+  );
+  const [height, setHeight] = useState(
+    painting.dimensions ? painting.dimensions[1] : '',
+  );
+  const [medium, setMedium] = useState(
+    painting.materials ? painting.materials[0] : '',
+  );
+  const [base, setBase] = useState(
+    painting.materials ? painting.materials[1] : '',
+  );
   const [fileNames, setFileNames] = useState<string[]>(painting.images);
 
   const styles = {
-    position: "absolute",
-    overflow: "auto",
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
-    top: "50%",
-    left: "50%",
-    width: "100%",
+    position: 'absolute',
+    overflow: 'auto',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    top: '50%',
+    left: '50%',
+    width: '100%',
     maxWidth: 600,
     minWidth: 400,
-    maxHeight: "90vh",
-    transform: "translate(-50%, -50%)",
-    bgcolor: "background.paper",
-    border: "2px solid #000",
+    maxHeight: '90vh',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
     boxShadow: 24,
-    p: 4, 
-  }
+    p: 4,
+  };
 
   const fileInputStyles: CSSProperties = {
-    clip: "rect(0 0 0 0)",
-    clipPath: "inset(50%)",
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
     height: 1,
-    overflow: "hidden",
-    position: "absolute",
+    overflow: 'hidden',
+    position: 'absolute',
     bottom: 0,
     left: 0,
-    whiteSpace: "nowrap",
+    whiteSpace: 'nowrap',
     width: 1,
   };
-  
+
   const currentYear = dayjs();
   const minYear = dayjs().year(2000);
 
@@ -82,85 +105,88 @@ export default function EditPaintingForm(props: EditPaintingProps) {
       const generatedDescription = await generateDescriptionFromTags(tags);
       setDescription(generatedDescription);
     } catch (e) {
-      console.error("Failed to generate description:", e);
+      console.error('Failed to generate description:', e);
     } finally {
       setIsGeneratingDescription(false);
     }
   };
 
-  const postPainting = async(formData: FormData) => {
+  const postPainting = async (formData: FormData) => {
     const response = await updatePainting(painting.id, formData);
     setResponse(response);
-    if (!response.error)  {
+    if (!response.error) {
       await revalidatePaintings();
       router.refresh();
       router.back();
     }
-  }
+  };
 
   const renderFileNames = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const updatedFileNames = [...event.target.files].map((file) => file.name);
-      setFileNames([...fileNames, ...updatedFileNames]); 
+      setFileNames([...fileNames, ...updatedFileNames]);
     }
-  }
+  };
 
   return (
     <Box sx={{ marginBottom: '2rem' }}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Box sx={styles}>
-          <Typography variant="h5" sx={{ mb: 2, textAlign: 'center' }}>Edit the painting</Typography>
-          <form 
-            className="w-full" 
-            action={postPainting}
-            >
+          <Typography variant="h5" sx={{ mb: 2, textAlign: 'center' }}>
+            Edit the painting
+          </Typography>
+          <form className="w-full" action={postPainting}>
             <Stack spacing={2}>
-              <TextField 
-                name="title" 
-                label='Title' 
-                variant='outlined' 
+              <TextField
+                name="title"
+                label="Title"
+                variant="outlined"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder='Title for the painting'
+                placeholder="Title for the painting"
                 slotProps={{
                   inputLabel: {
                     shrink: true,
                   },
                 }}
               />
-              <TextField 
+              <TextField
                 name="tags"
-                placeholder='Add tags separated by comma to generate automatic description'
+                placeholder="Add tags separated by comma to generate automatic description"
                 multiline
                 minRows={1}
                 maxRows={2}
-                label='Tags' 
-                variant='outlined'
+                label="Tags"
+                variant="outlined"
                 value={tags}
-                onChange={(e) => setTags(e.target.value.split(',').map(tag => tag.trim()))}
+                onChange={(e) =>
+                  setTags(e.target.value.split(',').map((tag) => tag.trim()))
+                }
                 slotProps={{
                   inputLabel: {
                     shrink: true,
                   },
                 }}
               />
-              <Button 
-                variant="outlined" 
+              <Button
+                variant="outlined"
                 onClick={handleGenerate}
                 disabled={isGeneratingDescription}
               >
-                {isGeneratingDescription ? "Generating description..." : "Generate description with Open AI"}
+                {isGeneratingDescription
+                  ? 'Generating description...'
+                  : 'Generate description with Open AI'}
               </Button>
 
-              <TextField 
-                name="description" 
+              <TextField
+                name="description"
                 multiline
                 minRows={2}
                 maxRows={5}
-                placeholder='Describe the painting or use the tags above to generate the description with Open AI'
-                label='Description' 
-                variant='outlined'
+                placeholder="Describe the painting or use the tags above to generate the description with Open AI"
+                label="Description"
+                variant="outlined"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 slotProps={{
@@ -169,11 +195,11 @@ export default function EditPaintingForm(props: EditPaintingProps) {
                   },
                 }}
               />
-              <TextField 
-                name="artist" 
-                label='Artist' 
-                variant='outlined' 
-                placeholder='Name of the artist'
+              <TextField
+                name="artist"
+                label="Artist"
+                variant="outlined"
+                placeholder="Name of the artist"
                 value={artist}
                 onChange={(e) => setArtist(e.target.value)}
                 slotProps={{
@@ -182,15 +208,15 @@ export default function EditPaintingForm(props: EditPaintingProps) {
                   },
                 }}
               />
-              
-              <p>Year</p>            
+
+              <p>Year</p>
               <YearCalendar
-                yearsPerRow={4} 
-                maxDate={currentYear} 
-                minDate={minYear} 
+                yearsPerRow={4}
+                maxDate={currentYear}
+                minDate={minYear}
                 value={dayjs().year(year)}
                 onChange={(date) => date && setYear(date.year())}
-                yearsOrder="desc" 
+                yearsOrder="desc"
                 sx={{
                   height: 100,
                 }}
@@ -204,9 +230,11 @@ export default function EditPaintingForm(props: EditPaintingProps) {
                 <OutlinedInput
                   id="price"
                   name="price"
-                  startAdornment={<InputAdornment position="start">€</InputAdornment>}
+                  startAdornment={
+                    <InputAdornment position="start">€</InputAdornment>
+                  }
                   label="Price"
-                  type='number'
+                  type="number"
                   value={price}
                   onChange={(e) => setPrice(parseInt(e.target.value))}
                   required
@@ -214,11 +242,11 @@ export default function EditPaintingForm(props: EditPaintingProps) {
                     input: {
                       step: 5,
                       min: 10,
-                    }
+                    },
                   }}
                 />
               </FormControl>
-              
+
               <p>Dimensions</p>
               <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
                 <FormControl sx={{ m: 1, width: '50%' }} variant="outlined">
@@ -229,11 +257,13 @@ export default function EditPaintingForm(props: EditPaintingProps) {
                     type="number"
                     value={width}
                     onChange={(e) => setWidth(e.target.value)}
-                    endAdornment={<InputAdornment position="end">cm</InputAdornment>}
+                    endAdornment={
+                      <InputAdornment position="end">cm</InputAdornment>
+                    }
                     slotProps={{
                       input: {
                         step: 5,
-                      }
+                      },
                     }}
                   />
                 </FormControl>
@@ -245,11 +275,13 @@ export default function EditPaintingForm(props: EditPaintingProps) {
                     type="number"
                     value={height}
                     onChange={(e) => setHeight(e.target.value)}
-                    endAdornment={<InputAdornment position="end">cm</InputAdornment>}
+                    endAdornment={
+                      <InputAdornment position="end">cm</InputAdornment>
+                    }
                     slotProps={{
                       input: {
                         step: 5,
-                      }
+                      },
                     }}
                   />
                 </FormControl>
@@ -259,7 +291,16 @@ export default function EditPaintingForm(props: EditPaintingProps) {
               <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
                 <FormControl sx={{ m: 1, width: '50%' }} variant="outlined">
                   <InputLabel id="medim-label">Medium</InputLabel>
-                  <Select name="medium" id="medium" label="Medium" labelId="medium-label" variant='outlined' defaultValue={''} value={medium} onChange={(e) => setMedium(e.target.value)}>
+                  <Select
+                    name="medium"
+                    id="medium"
+                    label="Medium"
+                    labelId="medium-label"
+                    variant="outlined"
+                    defaultValue={''}
+                    value={medium}
+                    onChange={(e) => setMedium(e.target.value)}
+                  >
                     <MenuItem value="Oil">Oil</MenuItem>
                     <MenuItem value="Watercolor">Watercolor</MenuItem>
                     <MenuItem value="Pastels">Pastels</MenuItem>
@@ -268,37 +309,57 @@ export default function EditPaintingForm(props: EditPaintingProps) {
                 </FormControl>
                 <FormControl sx={{ m: 1, width: '50%' }} variant="outlined">
                   <InputLabel id="base-label">Base</InputLabel>
-                  <Select name="base" id="base" label='Base' labelId="base-label" variant='outlined' defaultValue={''} value={base} onChange={(e) => setBase(e.target.value)}>
+                  <Select
+                    name="base"
+                    id="base"
+                    label="Base"
+                    labelId="base-label"
+                    variant="outlined"
+                    defaultValue={''}
+                    value={base}
+                    onChange={(e) => setBase(e.target.value)}
+                  >
                     <MenuItem value="Streched Canvas">Streched canvas</MenuItem>
-                    <MenuItem value="Canvas on Board">Canvas on carton</MenuItem>
+                    <MenuItem value="Canvas on Board">
+                      Canvas on carton
+                    </MenuItem>
                     <MenuItem value="Paper">Paper</MenuItem>
                     <MenuItem value="Carton">Carton</MenuItem>
                     <MenuItem value="Other">Other</MenuItem>
                   </Select>
                 </FormControl>
-              </Stack> 
-              <Button component='label' variant='outlined' startIcon={<CloudUploadIcon />}>
+              </Stack>
+              <Button
+                component="label"
+                variant="outlined"
+                startIcon={<CloudUploadIcon />}
+              >
                 Upload images
-                <input 
-                  type="file" 
-                  name="image" 
-                  style={fileInputStyles} 
-                  onChange={renderFileNames} 
+                <input
+                  type="file"
+                  name="image"
+                  style={fileInputStyles}
+                  onChange={renderFileNames}
                   multiple
-                  accept="image/*" 
+                  accept="image/*"
                 />
               </Button>
               {fileNames.map((file) => (
                 <Box key={file} className="flex items-center justify-between">
                   <Typography>{file}</Typography>
                   <Tooltip title="Delete image" arrow>
-                    <IconButton aria-label="delete" onClick={() => setFileNames(fileNames.filter(f => f !== file))}>
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() =>
+                        setFileNames(fileNames.filter((f) => f !== file))
+                      }
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </Tooltip>
                 </Box>
               ))}
-      
+
               {response?.error && (
                 <Alert severity="error">
                   {response.error.split(',').map((msg, index) => (
@@ -308,8 +369,23 @@ export default function EditPaintingForm(props: EditPaintingProps) {
               )}
 
               <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
-                <Button variant='outlined' style={{width: '50%'}} type="button" onClick={() => {router.back()}}>Cancel</Button>           
-                <Button variant='contained' style={{width: '50%'}} type="submit">Update</Button>
+                <Button
+                  variant="outlined"
+                  style={{ width: '50%' }}
+                  type="button"
+                  onClick={() => {
+                    router.back();
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  style={{ width: '50%' }}
+                  type="submit"
+                >
+                  Update
+                </Button>
               </Stack>
             </Stack>
           </form>

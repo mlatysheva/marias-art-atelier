@@ -6,14 +6,12 @@ interface EditPaintingProps {
 }
 
 export default async function EditPainting(props: EditPaintingProps) {
-const params = await props.params;
-  const painting = await getPainting(params.paintingId);  
+  const params = await props.params;
+  const painting = await getPainting(params.paintingId);
 
   if (!painting) {
     return <p>Painting not found</p>;
   }
 
-  return (
-    <EditPaintingForm painting={painting} />
-  );
+  return <EditPaintingForm painting={painting} />;
 }

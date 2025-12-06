@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Card,
@@ -7,13 +7,13 @@ import {
   Typography,
   Box,
   Tooltip,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import type { Painting } from "./interfaces/painting.interface";
-import Image from "next/image";
-import { getFirstPaintingImagePath } from "./painting-image";
-import { useRouter } from "next/navigation";
-import DeletePainting from "./[paintingId]/delete-painting/delete-painting";
+} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import type { Painting } from './interfaces/painting.interface';
+import Image from 'next/image';
+import { getFirstPaintingImagePath } from './painting-image';
+import { useRouter } from 'next/navigation';
+import DeletePainting from './[paintingId]/delete-painting/delete-painting';
 
 interface PaintingProps {
   painting: Painting;
@@ -36,7 +36,7 @@ export default function Painting({
       >
         <Box>
           <Typography variant="h5">{painting.title}</Typography>
-          <Typography variant="h6" sx={{ fontFamily: "cursive" }}>
+          <Typography variant="h6" sx={{ fontFamily: 'cursive' }}>
             {painting.artist}
           </Typography>
         </Box>
@@ -51,7 +51,7 @@ export default function Painting({
                 <EditIcon />
               </IconButton>
             </Tooltip>
-            <DeletePainting paintingId={painting.id}/>
+            <DeletePainting paintingId={painting.id} />
           </Box>
         )}
       </Box>

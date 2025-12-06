@@ -1,10 +1,13 @@
-"use server";
+'use server';
 
 import { revalidateTag } from 'next/cache';
 import { patch } from '../../shared/utils/fetch';
 import { uploadPaintingImages } from '../../paintings/create-painting/create-painting';
 
-export default async function updatePainting(paintingId: string, formData: FormData) {
+export default async function updatePainting(
+  paintingId: string,
+  formData: FormData,
+) {
   const payload: Record<string, unknown> = {};
 
   formData.forEach((value, key) => {
@@ -29,7 +32,7 @@ export default async function updatePainting(paintingId: string, formData: FormD
 
   const response = await patch(`paintings/${paintingId}`, payload);
   const paintingImages = formData.getAll('image') as File[];
-  
+
   if (paintingImages.length > 0 && !response.error) {
     await uploadPaintingImages(response.data.id, paintingImages);
   }
