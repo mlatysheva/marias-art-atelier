@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Ensure we run from repository root
+cd -- "$(dirname "$0")/.."
+
+set -e
+npm run format
+npm run lint
