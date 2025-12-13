@@ -25,7 +25,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import generateDescriptionFromTags from '../../paintings/create-painting/generate-description';
 import { FormResponse } from '../../shared/interfaces/form-response.interface';
-import React, { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Painting } from '../../paintings/interfaces/painting.interface';
 import updatePainting from './update-painting';
 import revalidatePaintings from '../../paintings/actions/revalidate-paintings';
@@ -61,6 +61,8 @@ export default function EditPaintingForm(props: EditPaintingProps) {
     painting.materials ? painting.materials[1] : '',
   );
   const [fileNames, setFileNames] = useState<string[]>(painting.images);
+  const [imagesToKeep, setImagesToKeep] = useState<string[]>(painting.images);
+  const [newFiles, setNewFiles] = useState<string[]>([]);
 
   const styles = {
     position: 'absolute',
@@ -123,8 +125,13 @@ export default function EditPaintingForm(props: EditPaintingProps) {
 
   const renderFileNames = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      const updatedFileNames = [...event.target.files].map((file) => file.name);
-      setFileNames([...fileNames, ...updatedFileNames]);
+      const newFiles = [...event.target.files].map((file) => file.name);
+      // What is shown in the UI
+      setFileNames([...fileNames, ...newFiles]);
+      // What is sent to the backend as new files
+      setNewFiles([...newFiles, ...newFiles]);
+      // What is sent to the backend as images to keep
+      setImagesToKeep([...imagesToKeep, ...newFiles]);
     }
   };
 
@@ -339,7 +346,7 @@ export default function EditPaintingForm(props: EditPaintingProps) {
                   type="file"
                   name="image"
                   style={fileInputStyles}
-                  onChange={renderFileNames}
+                  onChange={(event) => renderFileNames(event)}
                   multiple
                   accept="image/*"
                 />
@@ -350,15 +357,21 @@ export default function EditPaintingForm(props: EditPaintingProps) {
                   <Tooltip title="Delete image" arrow>
                     <IconButton
                       aria-label="delete"
-                      onClick={() =>
-                        setFileNames(fileNames.filter((f) => f !== file))
-                      }
+                      onClick={() => {
+                        setFileNames(fileNames.filter((f) => f !== file));
+                        setImagesToKeep(imagesToKeep.filter((f) => f !== file));
+                      }}
                     >
                       <DeleteIcon />
                     </IconButton>
                   </Tooltip>
                 </Box>
               ))}
+              <input
+                type="hidden"
+                name="imagesToKeep"
+                value={JSON.stringify(imagesToKeep)}
+              />
 
               {response?.error && (
                 <Alert severity="error">
