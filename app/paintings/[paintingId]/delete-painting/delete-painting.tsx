@@ -5,6 +5,7 @@ import { IconButton, Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import deletePainting from './actions/delete-painting';
 import { useRouter } from 'next/navigation';
+import revalidatePaintings from '../../actions/revalidate-paintings';
 
 interface DeletePaintingProps {
   paintingId: string;
@@ -20,7 +21,7 @@ export default function DeletePainting({ paintingId }: DeletePaintingProps) {
 
     const result = await deletePainting(paintingId);
     if (result.ok) {
-      router.push('/');
+      await revalidatePaintings();
       router.refresh();
     } else {
       alert('Failed to delete painting');

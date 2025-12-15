@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import { getHeaders, post } from '../../shared/utils/fetch';
 import { API_URL } from '../../shared/constants/api';
 
@@ -12,7 +12,8 @@ export default async function createPainting(formData: FormData) {
     await uploadPaintingImages(response.data.id, paintingImages);
   }
 
-  revalidateTag('paintings', 'max');
+  revalidatePath('/manage-paintings');
+
   return response;
 }
 
