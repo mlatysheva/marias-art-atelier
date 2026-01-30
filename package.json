@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint \"app/**/*.ts\" --fix",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:e2e": "playwright test --ui"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
@@ -31,11 +32,13 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.58.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^25",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.23",
+    "dotenv": "^17.2.3",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.6",
     "husky": "^9.1.7",

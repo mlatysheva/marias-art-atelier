@@ -13,6 +13,11 @@ The app provides the following functionality supported by the backend app (https
 - Using Open AI to automatically generate a description for the painting based on tags the user has provided
 - Buying a selected painting using the `Stripe` interface
 - Using websockets with `socket.io` to update the list of paintings in real time after a successful purchase
+- CRUD functionality for the user who uploaded the painting:
+  - Update: the user can edit a painting, including deleting images and adding new images
+  - Delete: the user can delete a painting, and the images will also be deleted from the server storage
+
+- Automated UI tests with playwright
 
 ## Project setup
 
@@ -25,6 +30,13 @@ $ npm install
 ```bash
 # development
 $ npm run dev
+```
+
+## Run the E2E UI tests:
+
+```bash
+# development
+$ npm run test:e2e
 ```
 
 ## Using the app
@@ -79,3 +91,6 @@ After a successful purchase, the list of available paintings is updated in real 
 - `dayjs` library to render a calender
 - `socket.io` library to use websockets
 - `keen-slider` to render the images of a painting in a caroussel
+- `playwright` to set up and run automated UI tests
+
+![Playwright tests](screenshots/playwright_tests.png)
