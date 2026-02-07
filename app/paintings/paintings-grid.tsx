@@ -8,6 +8,7 @@ import { io, Socket } from 'socket.io-client';
 import { API_URL } from '../shared/constants/api';
 import revalidatePaintings from './actions/revalidate-paintings';
 import getAuthentication from '../auth/actions/get-authentication';
+import { useRouter } from 'next/navigation';
 
 interface PaintingsGridProps {
   paintings: IPainting[];
@@ -18,6 +19,8 @@ export default function PaintingsGrid({
   paintings,
   adminView = false,
 }: PaintingsGridProps) {
+  const router = useRouter();
+
   useEffect(() => {
     let socket: Socket;
 
@@ -28,8 +31,9 @@ export default function PaintingsGrid({
         },
       });
 
-      socket.on('Painting updated', () => {
-        revalidatePaintings();
+      socket.on('Painting updated', async () => {
+        await revalidatePaintings();
+        router.refresh();
       });
     };
     createSocket();
@@ -37,7 +41,7 @@ export default function PaintingsGrid({
     return () => {
       socket?.disconnect();
     };
-  }, []);
+  }, [router]);
 
   return (
     <Grid container spacing={3}>

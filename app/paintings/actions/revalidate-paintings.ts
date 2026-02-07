@@ -1,7 +1,9 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 export default async function revalidatePaintings() {
+  revalidateTag('paintings', 'max');
+  revalidatePath('/');
   revalidatePath('/manage-paintings');
 }
