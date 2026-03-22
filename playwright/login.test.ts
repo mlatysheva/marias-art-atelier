@@ -1,28 +1,20 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
-
-const user = process.env.PLAYWRIGHT_USER;
-const password = process.env.PLAYWRIGHT_PASSWORD;
-const authFile = path.join(__dirname, '.auth', 'user.json');
+import { authFile, getRequiredCredentials } from './helpers/auth';
+import { AvailablePaintingsPage } from './pages/available-paintings.page';
+import { LoginPage } from './pages/login.page';
 
 test('login e2e user', async ({ page }) => {
-  if (!user || !password) {
-    throw new Error(
-      'Missing PLAYWRIGHT_USER or PLAYWRIGHT_PASSWORD in playwright/.env',
-    );
-  }
+  const { user, password } = getRequiredCredentials();
+  const loginPage = new LoginPage(page);
+  const availablePaintingsPage = new AvailablePaintingsPage(page);
 
   fs.mkdirSync(path.dirname(authFile), { recursive: true });
 
-  await page.goto('/auth/login');
-  await page.getByLabel('Email').fill(user);
-  await page.getByLabel('Password').fill(password);
-  await page.locator('form').getByRole('button', { name: 'Login' }).click();
-  await expect(page).toHaveURL('/');
-  await expect(
-    page.getByRole('heading', { name: 'Available paintings' }),
-  ).toBeVisible();
+  await loginPage.goto();
+  await loginPage.login(user, password);
+  await availablePaintingsPage.expectLoaded();
 
   await page.context().storageState({ path: authFile });
 });
