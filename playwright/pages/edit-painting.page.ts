@@ -10,7 +10,10 @@ export class EditPaintingPage {
   }
 
   async expectLoaded() {
-    await expect(this.page).toHaveURL(/\/manage-paintings\/[^/]+$/);
+    // Support both route shapes:
+    // - /manage-paintings/:id (dedicated edit route)
+    // - /manage-paintings (inline/edit-in-place variant)
+    await expect(this.page).toHaveURL(/\/manage-paintings(?:\/[^/?#]+)?(?:[?#].*)?$/);
     await this.form.expectVisible();
   }
 }
