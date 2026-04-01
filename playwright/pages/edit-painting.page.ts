@@ -13,7 +13,9 @@ export class EditPaintingPage {
     // Support both route shapes:
     // - /manage-paintings/:id (dedicated edit route)
     // - /manage-paintings (inline/edit-in-place variant)
-    await expect(this.page).toHaveURL(/\/manage-paintings(?:\/[^/?#]+)?(?:[?#].*)?$/);
+    await expect(this.page).toHaveURL(
+      /\/manage-paintings(?:\/[^/?#]+)?(?:[?#].*)?$/,
+    );
     await this.form.expectVisible();
   }
 }
