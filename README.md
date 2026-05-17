@@ -80,6 +80,12 @@ After a successful purchase, the list of available paintings is updated in real 
 
 ![Available paintings after purchase](screenshots/paintings_after_payment.png)
 
+## Automated UI Tests with Playwright
+
+E2E automated tests with Playwright check the desktop and mobile versions of the app.
+
+![Playwright tests](screenshots/playwright_tests.png)
+
 ## Stack used:
 
 - React
@@ -92,5 +98,3 @@ After a successful purchase, the list of available paintings is updated in real 
 - `socket.io` library to use websockets
 - `keen-slider` to render the images of a painting in a caroussel
 - `playwright` to set up and run automated UI tests
-
-![Playwright tests](screenshots/playwright_tests.png)

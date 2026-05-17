@@ -6,7 +6,7 @@ import { LoginPage } from './pages/login.page';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
-test('Login validation and authentication error handling', async ({ page }) => {
+test('login validation and authentication error handling', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   // 1. Open `/auth/login`.

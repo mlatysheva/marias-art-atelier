@@ -6,7 +6,7 @@ import { LoginPage } from './pages/login.page';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
-test('Route protection and redirect behavior', async ({ page }) => {
+test('route protection and redirect behavior', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   // 1. Directly navigate to `/`.
