@@ -29,10 +29,12 @@ export default function Painting({
   return (
     <Card className="p-4 flex flex-col justify-between">
       <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        sx={{ mb: 2 }}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          mb: 2,
+        }}
       >
         <Box>
           <Typography variant="h5">{painting.title}</Typography>

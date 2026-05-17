@@ -32,7 +32,7 @@ export default async function SinglePainting(props: SinglePaintingProps) {
         </Grid>
 
         {/* Right Column: Painting Info */}
-        <Grid size={{ xs: 12, md: 5 }} marginLeft={{ xs: 0, md: 0, lg: 10 }}>
+        <Grid size={{ xs: 12, md: 5 }} sx={{ ml: { xs: 0, md: 0, lg: 10 } }}>
           <Stack spacing={2}>
             <Typography variant="h3">{painting.title}</Typography>
             <Typography variant="h4" sx={{ fontFamily: 'cursive' }}>
